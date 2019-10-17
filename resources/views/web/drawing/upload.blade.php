@@ -1,4 +1,11 @@
 @extends('web.layouts.dashboard-layout')
+@section('header')
+    <style>
+        .tool-container li {
+            display: inline-block;
+        }
+    </style>
+@endsection
 @section('content')
     <div class="app-main__inner">
         <div class="app-page-title">
@@ -17,7 +24,7 @@
         <form class="" id="upload_file" method="post" enctype="multipart/form-data" action="{{ url('/') }}/upload-drawing">
             @csrf
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="alert alert-danger error-msg" style="display:none">
                         <ul></ul>
                     </div>
@@ -35,78 +42,44 @@
                             </div>
                         </div>
                     </div>
-                    {{--<div class="main-card mb-3 card">
-                        <div class="card-body"><h5 class="card-title">Inline</h5>
-                            <div class="position-relative form-group">
-                                <div>
-                                    <div class="custom-checkbox custom-control custom-control-inline"><input type="checkbox" id="exampleCustomInline" class="custom-control-input"><label class="custom-control-label"
-                                                                                                                                                                                          for="exampleCustomInline">An inline custom
-                                            input</label></div>
-                                    <div class="custom-checkbox custom-control custom-control-inline"><input type="checkbox" id="exampleCustomInline2" class="custom-control-input"><label class="custom-control-label"
-                                                                                                                                                                                           for="exampleCustomInline2">and another one</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>--}}
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <div class="main-card mb-3 card">
-                        <div class="card-body"><h5 class="card-title">Drawing Preview</h5>
+                        <div class="card-body"><h5 class="card-title">Drawing Tool</h5>
                             <div class="position-relative form-group">
                                 <div>
 {{--                                    <div class="preview-uploaded-image"></div>--}}
-                                    <canvas  width="500" height="900" id="canvas"></canvas>
+                                    <ul class="list-inline tool-container">
+                                        <li>
+                                            <img width="100" src="{{ url('/') }}/assets/img/rect.png">
+                                        </li>
+                                        <li>
+                                            <img width="80" src="{{ url('/') }}/assets/img/triangle.png">
+                                        </li>
+                                        <li>
+                                            <img width="80" src="{{ url('/') }}/assets/img/circle.png">
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {{--<div class="main-card mb-3 card">
-                        <div class="card-body"><h5 class="card-title">Form Select</h5>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="position-relative form-group"><label for="exampleCustomSelect" class="">Custom Select</label><select type="select" id="exampleCustomSelect" name="customSelect" class="custom-select">
-                                            <option value="">Select</option>
-                                            <option>Value 1</option>
-                                            <option>Value 2</option>
-                                            <option>Value 3</option>
-                                            <option>Value 4</option>
-                                            <option>Value 5</option>
-                                        </select></div>
-                                    <div class="position-relative form-group"><label for="exampleCustomMutlipleSelect" class="">Custom Multiple Select</label><select multiple="" type="select" id="exampleCustomMutlipleSelect"
-                                                                                                                                                                      name="customSelect" class="custom-select">
-                                            <option value="">Select</option>
-                                            <option>Value 1</option>
-                                            <option>Value 2</option>
-                                            <option>Value 3</option>
-                                            <option>Value 4</option>
-                                            <option>Value 5</option>
-                                        </select></div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="position-relative form-group"><label for="exampleCustomSelectDisabled" class="">Custom Select Disabled</label><select type="select" id="exampleCustomSelectDisabled" name="customSelect"
-                                                                                                                                                                      disabled="" class="custom-select">
-                                            <option value="">Select</option>
-                                            <option>Value 1</option>
-                                            <option>Value 2</option>
-                                            <option>Value 3</option>
-                                            <option>Value 4</option>
-                                            <option>Value 5</option>
-                                        </select></div>
-                                    <div class="position-relative form-group"><label for="exampleCustomMutlipleSelectDisabled" class="">Custom Multiple Select Disabled</label><select multiple="" type="select"
-                                                                                                                                                                                       id="exampleCustomMutlipleSelectDisabled"
-                                                                                                                                                                                       name="customSelect" disabled="" class="custom-select">
-                                            <option value="">Select</option>
-                                            <option>Value 1</option>
-                                            <option>Value 2</option>
-                                            <option>Value 3</option>
-                                            <option>Value 4</option>
-                                            <option>Value 5</option>
-                                        </select></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="main-card mb-3 card">
+                        <div class="card-body"><h5 class="card-title">Dra<span style="background: #f19240">win</span>g</h5>
+                            <div class="position-relative form-group">
+                                <div>
+                                    <div class="preview-uploaded-image"></div>
+                                    {{--<div id="canvas-container">
+                                        <canvas id="canvas-data-container" width="930" height="600" style="border: 1px solid black;"></canvas>
+                                    </div>--}}
                                 </div>
                             </div>
                         </div>
-                    </div>--}}
+                    </div>
                 </div>
             </div>
         </form>
@@ -114,20 +87,17 @@
 @endsection
 @section('footer')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.1/jquery.form.min.js"></script>
-    <script src="http://code.createjs.com/easeljs-0.5.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.6.2/fabric.min.js"></script>
+    <script src="{{ asset('assets/js/custom/canvas-drawing.js') }}"></script>
     <script>
-        var canvas;
-        var stage;
         $("body").on("click","#upload_drawing",function(e){
             $(this).parents("form").ajaxForm({
                 complete: function(response)
                 {
-                    if($.isEmptyObject(response.responseJSON.image)){
-                        // $('.preview-uploaded-image').html('<img src="'+response.responseJSON.url+'">');
-                        let imagePath = '{{ url('/') }}/'+ response.responseJSON.url;
-                        displayPicture(imagePath);
-
-                    }else{
+                    if ($.isEmptyObject(response.responseJSON.image)) {
+                        $('.preview-uploaded-image').html('<img width="620" src="'+response.responseJSON.url+'">');
+                        {{--                        let imagePath = '{{ url('/') }}/'+ response.responseJSON.url;--}}
+                    } else {
                         var msg = response.responseJSON.image;
                         $(".error-msg").find("ul").html('');
                         $(".error-msg").css('display','block');
@@ -138,47 +108,6 @@
                 }
             });
         });
-        /**
-         * Load and display the uploaded picture on CreateJS Stage
-         */
-        function displayPicture(imgPath)
-        {
-            var image = new Image();
-            image.onload = function () {
-                // Create a Bitmap from the loaded image
-                var img = new createjs.Bitmap(event.target)
-                // scale it
-                img.scaleX = img.scaleY = 0.5;
-                /// Add to display list
-                stage.addChild(img);
-                //Enable Drag'n'Drop
-                enableDrag(img);
-                // Render Stage
-                stage.update();
-            }
-            // Load the image
-            image.src = imgPath;
-        }
 
-
-        /**
-         * Enable drag'n'drop on DisplayObjects
-         */
-        function enableDrag(item) {
-            // OnPress event handler
-            item.onPress = function(evt) {
-                var offset = {	x:item.x-evt.stageX,
-                    y:item.y-evt.stageY};
-                // Bring to front
-                stage.addChild(item);
-                // Mouse Move event handler
-                evt.onMouseMove = function(ev) {
-
-                    item.x = ev.stageX+offset.x;
-                    item.y = ev.stageY+offset.y;
-                    stage.update();
-                }
-            }
-        }
     </script>
 @endsection
