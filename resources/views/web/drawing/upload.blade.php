@@ -4,6 +4,9 @@
         .tool-container li {
             display: inline-block;
         }
+        #canvas-data-container {
+            border: 2px dotted black;
+        }
     </style>
 @endsection
 @section('content')
@@ -50,14 +53,17 @@
                                 <div>
 {{--                                    <div class="preview-uploaded-image"></div>--}}
                                     <ul class="list-inline tool-container">
-                                        <li>
-                                            <img width="100" src="{{ url('/') }}/assets/img/rect.png">
+                                        <li class="tool">
+                                            <img width="100" style="border: 1px solid slateblue;" src="{{ url('/') }}/assets/img/rect.png">
+                                        </li>
+                                        <li class="tool">
+                                            <img width="80" style="border: 1px solid slateblue;" src="{{ url('/') }}/assets/img/triangle.png">
+                                        </li>
+                                        <li class="tool">
+                                            <img width="80" style="border: 1px solid slateblue;" src="{{ url('/') }}/assets/img/circle.png">
                                         </li>
                                         <li>
-                                            <img width="80" src="{{ url('/') }}/assets/img/triangle.png">
-                                        </li>
-                                        <li>
-                                            <img width="80" src="{{ url('/') }}/assets/img/circle.png">
+                                            <img src="{{ url('/') }}/assets/img/user.png" id="myImageElem">
                                         </li>
                                     </ul>
                                 </div>
@@ -72,10 +78,19 @@
                         <div class="card-body"><h5 class="card-title">Dra<span style="background: #f19240">win</span>g</h5>
                             <div class="position-relative form-group">
                                 <div>
-                                    <div class="preview-uploaded-image"></div>
-                                    {{--<div id="canvas-container">
-                                        <canvas id="canvas-data-container" width="930" height="600" style="border: 1px solid black;"></canvas>
-                                    </div>--}}
+{{--                                    <div class="preview-uploaded-image"></div>--}}
+                                    <div id="canvas-container">
+                                        <canvas id="canvas-data-container" width="400" height="300">
+                                            <p>Unfortunately, your browser is currently unsupported by our web
+                                                application.  We are sorry for the inconvenience. Please use one of the
+                                                supported browsers listed below, or draw the image you want using an
+                                                offline tool.</p>
+                                            <p>Supported browsers: <a href="http://www.opera.com">Opera</a>, <a
+                                                    href="http://www.mozilla.com">Firefox</a>, <a
+                                                    href="http://www.apple.com/safari">Safari</a>, and <a
+                                                    href="http://www.konqueror.org">Konqueror</a>.</p>
+                                        </canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -87,18 +102,24 @@
 @endsection
 @section('footer')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.1/jquery.form.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.6.2/fabric.min.js"></script>
+{{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.6.2/fabric.min.js"></script>--}}
+{{--    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>--}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/kineticjs/5.2.0/kinetic.min.js" integrity="sha256-AWw1Yzd6A/1rryjnxrSdZLSsORf81GW8yMCH+9XyB2I=" crossorigin="anonymous"></script>
     <script src="{{ asset('assets/js/custom/canvas-drawing.js') }}"></script>
     <script>
         $("body").on("click","#upload_drawing",function(e){
             $(this).parents("form").ajaxForm({
                 complete: function(response)
                 {
-                    if ($.isEmptyObject(response.responseJSON.image)) {
-                        $('.preview-uploaded-image').html('<img width="620" src="'+response.responseJSON.url+'">');
-                        {{--                        let imagePath = '{{ url('/') }}/'+ response.responseJSON.url;--}}
+                    // if ($.isEmptyObject(response.responseJSON.image)) {
+                    if (response.responseJSON.url != undefined) {
+                        // $('.preview-uploaded-image').html('<img width="620" src="'+response.responseJSON.url+'">');
+                        let imagePath = '{{ url('/') }}/'+ response.responseJSON.url;
+                        // initCanvasOnImageUpload(imagePath);
+                        // addImage(20,20,0.50, imagePath);
+                        initCanvasOnUpload(imagePath)
                     } else {
-                        var msg = response.responseJSON.image;
+                        var msg = response.responseJSON;
                         $(".error-msg").find("ul").html('');
                         $(".error-msg").css('display','block');
                         $.each( msg, function( key, value ) {
@@ -108,6 +129,5 @@
                 }
             });
         });
-
     </script>
 @endsection
