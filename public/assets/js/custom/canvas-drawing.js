@@ -78,6 +78,7 @@ addImage(20,20,0.50,imageData !== null ? imageData : 'https://res.cloudinary.com
         ctx.fillRect(0, 0, WIDTH, HEIGHT);
         for (var i = 0; i < images.length; i++) {
             var r = images[i];
+            // ctx.rotate(Math.PI); // rotate
             ctx.drawImage(r.image, r.x, r.y, r.width, r.height);
         }
     }
