@@ -5,7 +5,7 @@ var opacity = Number;
 
 $(function () {
     initCanvas();
-    addText();
+    // addText();
     canvas.setActiveObject(canvas.item(0));
     window.addEventListener('resize', onWindowResize);
 });
@@ -34,6 +34,7 @@ initCanvas = () => {
         eval(() => {
             activeObject = canvas.getActiveObject();
             // color = this.mdPickerColors.getColor(this.activeObject.get('fill'));
+            color = $('#colorpicker').val();
             opacity = activeObject.get('opacity') * 100;
         });
         $('.property-box').css('display', 'block');
@@ -52,6 +53,7 @@ initCanvas = () => {
         eval(() => {
             activeObject = canvas.getActiveObject();
             // color = this.mdPickerColors.getColor(this.activeObject.get('fill'));
+            color = $('#colorpicker').val();
             opacity = +(activeObject.get('opacity') * 100).toFixed();
         });
     });
@@ -65,7 +67,7 @@ onWindowResize = () => {
 }
 
 addText = () => {
-    let text = new fabric.IText('Sample Text', {
+    let text = new fabric.IText('Your Text', {
         left: canvas.width / 2,
         top: canvas.height / 2,
         fill: '#e0f7fa',
@@ -84,7 +86,7 @@ addText = () => {
 }
 
 addRect = () => {
-    canvas.add(new fabric.Rect({
+    var rect = new fabric.Rect({
         left: canvas.width / 2,
         top: canvas.height / 2,
         fill: '#ffa726',
@@ -93,12 +95,18 @@ addRect = () => {
         originX: 'center',
         originY: 'center',
         strokeWidth: 0
-    }));
+    });
+    // canvas.add(rect);
+    var text = new fabric.Text('W',{top: 4, left: 100, fontSize: 16, originX: 'right'});
+    var text2 = new fabric.Text('H',{top: 50, left: 0, fontSize: 16, originX: 'left', angle: -90});
+    var group = new fabric.Group([rect, text, text2], {strokeWidth:0});
+    canvas.add(group);
+    canvas.on("object:scaling", updateMeasures);
     $('.colorbox-container').css('display', 'block');
 };
 
 addCircle = () => {
-    canvas.add(new fabric.Circle({
+    var circle = new fabric.Circle({
         left: canvas.width / 2,
         top: canvas.height / 2,
         fill: '#26a69a',
@@ -106,8 +114,12 @@ addCircle = () => {
         originX: 'center',
         originY: 'center',
         strokeWidth: 0
-    }));
+    });
+    canvas.add(circle);
     $('.colorbox-container').css('display', 'block');
+    circle.on('scaling',function(){
+        console.log(parseInt(this.getScaledWidth()))
+    })
 };
 
 addTriangle = () => {
@@ -120,6 +132,21 @@ addTriangle = () => {
         originX: 'center',
         originY: 'center',
         strokeWidth: 0
+    }));
+    $('.colorbox-container').css('display', 'block');
+};
+
+addLine = () => {
+    canvas.add(new fabric.Line([0, 0, 100, 100], {
+        left: canvas.width / 2,
+        top: canvas.height / 2,
+        fill: 'tomato',
+        stroke: 'tomato',
+        selectable: true,
+        originX: 'center',
+        originY: 'center',
+        strokeWidth: 2,
+        perPixelTargetFind: true
     }));
     $('.colorbox-container').css('display', 'block');
 };
@@ -204,15 +231,18 @@ remove = () => {
     }
 }
 
-getStyle = (e) => {
-    console.log('e '. e);
+getStyle = (colorRGB) => {
     if (activeObject != null) {
         if (color != null) {
-            if (color.hex !== activeObject.fill.toLowerCase()) {
+            /*if (color.hex !== activeObject.fill.toLowerCase()) {
                 activeObject.set('fill', color.hex);
                 canvas.requestRenderAll();
             }
-
+            return color.style;*/
+            if (colorRGB !== '') {
+                canvas.getActiveObject().set("fill", colorRGB);
+                canvas.requestRenderAll();
+            }
             return color.style;
         }
         else {
@@ -279,3 +309,18 @@ fnSendToBack = () => {
         canvas.renderAll();
     }
 };
+
+function updateMeasures(evt) {
+    var obj = evt.target;
+    if (obj.type != 'group') {
+        return;
+    }
+    var width = obj.getScaledWidth();
+    var height = obj.getScaledHeight();
+    obj._objects[1].text = width.toFixed(2) + 'px';
+    obj._objects[1].scaleX= 1 / obj.scaleX;
+    obj._objects[1].scaleY= 1 / obj.scaleY;
+    obj._objects[2].text = height.toFixed(2) + 'px';
+    obj._objects[2].scaleX= 1 / obj.scaleY;
+    obj._objects[2].scaleY= 1 / obj.scaleX;
+}

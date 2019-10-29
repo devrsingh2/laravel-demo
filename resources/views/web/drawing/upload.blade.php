@@ -10,13 +10,9 @@
         .modal-dialog{
             top: 100px;
         }
-        .ui-colorpicker {
-            left: 358px !important;
-            top: 35% !important;
-            z-index: 9;
-        }
+
     </style>
-    <link rel="stylesheet" href="{{ asset('assets/css/materialcolorpicker/picker.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-colorpicker/bootstrap-colorpicker.min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('assets/css/customize/drawing.css') }}" />
 @endsection
 @section('content')
@@ -74,8 +70,8 @@
                                             </button>
                                             <button type="button" class="btn btn-outline-dark" onclick="addCircle()">Add Circle
                                             </button>
-                                            <button type="button" class="btn btn-outline-dark" onclick="addTriangle()">Add Triangle
-                                            </button>
+                                            <button type="button" class="btn btn-outline-dark" onclick="addTriangle()">Add Triangle</button>
+                                            <button type="button" class="btn btn-outline-dark" onclick="addLine()">Add Line</button>
                                             <button type="button" class="btn btn-outline-dark" onclick="addImage(this)">Add Image
                                             </button>
                                             <button type="button" class="btn btn-danger" onclick="remove()">Remove
@@ -87,7 +83,11 @@
                                                     <div class="colorbox" ng-style="getStyle()">
                                                     </div>
                                                 </md-color-menu>--}}
-                                                <input type="text" id="colorpicker" name="color" class="picker" onclick="getStyle(this)" value="#e0e0e0"/>
+                                                {{--                                                <input type="text" id="colorpicker" name="color" class="picker" onblur="getStyle()" value="#e0e0e0"/>--}}
+                                                <div class="form-group">
+                                                    <br/>
+                                                    <input type="text" style="width: 200px;" class="form-control" id="colorpicker-input" name="color" class="picker" value="rgb(255, 128, 0)"/>
+                                                </div>
                                                 {{--                                                <span>Fill: {{main.activeObject.fill}}</span>--}}
                                             </div>
                                             <div>
@@ -108,7 +108,7 @@
                                                     </md-input-container>
                                                 </md-slider-container>--}}
                                             </div>
-                                            <div layout="row">
+                                            {{--<div layout="row">
                                                 <button type="button" class="btn btn-outline-dark btn-sm" onclick="fnBringForward()"
                                                         data-toggle="tooltip" data-placement="top" title="Bring forward"
                                                 >↑
@@ -125,7 +125,7 @@
                                                         data-toggle="tooltip" data-placement="top" title="Send to back"
                                                 >⇓
                                                 </button>
-                                            </div>
+                                            </div>--}}
                                         </div>
                                         <div ng-show="activeObject.type === 'i-text'" class="property-box">
                                             {{--<div>
@@ -196,14 +196,22 @@
 @endsection
 @section('footer')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.1/jquery.form.min.js"></script>
-    <script src="{{ asset('assets/js/materialcolorpicker/picker.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap-colorpicker/bootstrap-colorpicker.js') }}"></script>
     {{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.6.2/fabric.min.js"></script>--}}
     {{--    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>--}}
     <script src="{{ asset('assets/js/fabric-3.4.0.min.js') }}" crossorigin="anonymous"></script>
     <script src="{{ asset('assets/js/custom/canvas-drawing.js') }}"></script>
-{{--    <script src="{{ asset('assets/js/custom/custom.js') }}"></script>--}}
+    {{--    <script src="{{ asset('assets/js/custom/custom.js') }}"></script>--}}
     <script>
-        $('#colorpicker').colorPicker();
+        $(function () {
+            $('#colorpicker-input').colorpicker();
+            // Example using an event, to change the color of the .jumbotron background:
+            $('#colorpicker-input').on('changeColor', function(event) {
+                // $('.jumbotron').css('background-color', event.color.toString());
+                $(this).css({'background-color': event.color.toString(), color: '#fff'});
+                getStyle(event.color.toString());
+            });
+        });
         $("body").on("click","#upload_drawing",function(e){
             $(this).parents("form").ajaxForm({
                 complete: function(response)
