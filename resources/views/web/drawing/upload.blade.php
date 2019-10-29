@@ -8,6 +8,7 @@
             border: 2px dotted black;
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('assets/css/customize/drawing.css') }}" />
 @endsection
 @section('content')
     <div class="app-main__inner">
@@ -51,8 +52,33 @@
                         <div class="card-body"><h5 class="card-title">Drawing Tool</h5>
                             <div class="position-relative form-group">
                                 <div>
+                                    <div class="toolblock">
+                                        <h4>Drawing Tools</h4>
+                                        <div class="inner_tool">
+                                            <button class="line-drawing-tools" data-value="circle">
+                                                <i class="toolicon1"></i>
+                                            </button>
+                                            <button class="line-drawing-tools" data-value="line">
+                                                <i class="toolicon2"></i>
+                                            </button>
+                                            <button class="line-drawing-tools" data-value="angle">
+                                                <i class="toolicon3"></i>
+                                            </button>
+                                            <button class="line-drawing-tools" data-value="move">
+                                                <i class="toolicon4"></i>
+                                            </button>
+
+                                        </div>
+                                        <a href="javascript:void(0)" class="line-drawing-tools" data-value="delete">Delete
+                                            Selected Shape
+                                        </a>
+                                        <br>
+                                        <a href="javascript:void(0)" class="line-drawing-tools" data-value="clear">Delete All
+                                            Shapes
+                                        </a>
+                                    </div>
 {{--                                    <div class="preview-uploaded-image"></div>--}}
-                                    <ul class="list-inline tool-container">
+                                    {{--<ul class="list-inline tool-container">
                                         <li class="tool">
                                             <img width="100" style="border: 1px solid slateblue;" src="{{ url('/') }}/assets/img/rect.png">
                                         </li>
@@ -65,7 +91,7 @@
                                         <li>
                                             <img src="{{ url('/') }}/assets/img/user.png" id="myImageElem">
                                         </li>
-                                    </ul>
+                                    </ul>--}}
                                 </div>
                             </div>
                         </div>
@@ -80,7 +106,7 @@
                                 <div>
 {{--                                    <div class="preview-uploaded-image"></div>--}}
                                     <div id="canvas-container">
-                                        <canvas id="canvas-data-container" width="400" height="300">
+                                        <canvas id="canvas-data-container">
                                             <p>Unfortunately, your browser is currently unsupported by our web
                                                 application.  We are sorry for the inconvenience. Please use one of the
                                                 supported browsers listed below, or draw the image you want using an
@@ -104,7 +130,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.1/jquery.form.min.js"></script>
 {{--    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.6.2/fabric.min.js"></script>--}}
 {{--    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>--}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/kineticjs/5.2.0/kinetic.min.js" integrity="sha256-AWw1Yzd6A/1rryjnxrSdZLSsORf81GW8yMCH+9XyB2I=" crossorigin="anonymous"></script>
+    <script src="{{ asset('assets/js/fabric-3.4.0.min.js') }}" crossorigin="anonymous"></script>
     <script src="{{ asset('assets/js/custom/canvas-drawing.js') }}"></script>
     <script>
         $("body").on("click","#upload_drawing",function(e){

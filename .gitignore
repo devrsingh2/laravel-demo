@@ -2,7 +2,7 @@
 /public/hot
 /public/storage
 /storage/*.key
-/public/uploads/mc-types/*.key
+/public/uploads/mc-types
 /vendor
 .env
 .env.backup
