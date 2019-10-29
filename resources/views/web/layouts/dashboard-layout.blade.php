@@ -9,7 +9,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
     <meta name="description" content="This is an example dashboard created using build-in elements and components.">
     <meta name="msapplication-tap-highlight" content="no">
-    <link href="{{ asset("assets/css/dashboard/main.css") }}" rel="stylesheet"></head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <link href="{{ asset("assets/css/dashboard/main.css") }}" rel="stylesheet">
+</head>
 @yield('header')
 <body>
 <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
@@ -24,6 +27,8 @@
     </div>
 </div>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 <script type="text/javascript" src="{{ asset("assets/js/dashboard/main.js") }}"></script>
 @yield('footer')
 </body>
