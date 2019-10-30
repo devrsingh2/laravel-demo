@@ -86,20 +86,34 @@ addText = () => {
 }
 
 addRect = () => {
+    let width = 120;
+    let height = 80;
     var rect = new fabric.Rect({
         left: canvas.width / 2,
         top: canvas.height / 2,
-        fill: '#ffa726',
-        width: 100,
-        height: 100,
+        // fill: '#ffa726',
+        fill: 'rgba(0,0,0,0)',
+        /*width: 120,
+        height: 80,*/
+        width: width,
+        height: height,
         originX: 'center',
         originY: 'center',
-        strokeWidth: 0
+        stroke: 'black',
+        strokeWidth: 1,
     });
     // canvas.add(rect);
-    var text = new fabric.Text('W',{top: 4, left: 100, fontSize: 16, originX: 'right'});
-    var text2 = new fabric.Text('H',{top: 50, left: 0, fontSize: 16, originX: 'left', angle: -90});
-    var group = new fabric.Group([rect, text, text2], {strokeWidth:0});
+    /*var text = new fabric.Text('W',{top: canvas.height / 2, left: canvas.width / 2.17, fontSize: 16, originX: 'right'});
+    var text2 = new fabric.Text('H',{top: canvas.height / 2.4, left: canvas.width / 1.85, fontSize: 16, originX: 'left', angle: -90});*/
+    var text = new fabric.Text('W', {top: canvas.height / 2, left: canvas.width / 2.17, fontSize: 16, originX: 'right'});
+    var text2 = new fabric.Text('H', {top: canvas.height / 2.2, left: canvas.width / 1.85, fontSize: 16, originX: 'left', angle: -90});
+    var group = new fabric.Group([rect, text, text2], {
+        width: width,
+        height: height,
+        /*left: 5,
+        top: 5,*/
+        strokeWidth:0
+    });
     canvas.add(group);
     canvas.on("object:scaling", updateMeasures);
     $('.colorbox-container').css('display', 'block');
@@ -109,29 +123,44 @@ addCircle = () => {
     var circle = new fabric.Circle({
         left: canvas.width / 2,
         top: canvas.height / 2,
-        fill: '#26a69a',
+        // fill: '#26a69a',
+        fill: 'rgba(0,0,0,0)',
         radius: 50,
         originX: 'center',
         originY: 'center',
-        strokeWidth: 0
+        stroke: 'black',
+        strokeWidth: 1,
     });
-    canvas.add(circle);
+    // canvas.add(circle);
+    var text = new fabric.Text('W', {top: canvas.height / 2.1, left: canvas.width / 2, fontSize: 16, originX: 'right'});
+
+    var group = new fabric.Group([ circle, text ], {
+        /*left: canvas.width / 2,
+        top: canvas.height / 2,*/
+        originX: 'center',
+        originY: 'center',
+    });
+    canvas.add(group);
+    canvas.on("object:scaling", updateCircleMeasures);
+
     $('.colorbox-container').css('display', 'block');
-    circle.on('scaling',function(){
+    /*circle.on('scaling',function(){
         console.log(parseInt(this.getScaledWidth()))
-    })
+    });*/
 };
 
 addTriangle = () => {
     canvas.add(new fabric.Triangle({
         left: canvas.width / 2,
         top: canvas.height / 2,
-        fill: '#78909c',
+        // fill: '#78909c',
+        fill: 'rgba(0,0,0,0)',
         width: 100,
         height: 100,
         originX: 'center',
         originY: 'center',
-        strokeWidth: 0
+        stroke: 'black',
+        strokeWidth: 1,
     }));
     $('.colorbox-container').css('display', 'block');
 };
@@ -315,12 +344,30 @@ function updateMeasures(evt) {
     if (obj.type != 'group') {
         return;
     }
-    var width = obj.getScaledWidth();
-    var height = obj.getScaledHeight();
-    obj._objects[1].text = width.toFixed(2) + 'px';
+    /*var width = obj.getScaledWidth();
+    var height = obj.getScaledHeight();*/
+    var width = obj.getScaledWidth() * 2.54 / 96;
+    var height = obj.getScaledHeight() * 2.54 / 96;
+    // obj._objects[1].text = width.toFixed(2) + 'px';
+    obj._objects[1].text = width.toFixed(2) + 'cm';
     obj._objects[1].scaleX= 1 / obj.scaleX;
     obj._objects[1].scaleY= 1 / obj.scaleY;
-    obj._objects[2].text = height.toFixed(2) + 'px';
+    // obj._objects[2].text = height.toFixed(2) + 'px';
+    obj._objects[2].text = height.toFixed(2) + 'cm';
     obj._objects[2].scaleX= 1 / obj.scaleY;
     obj._objects[2].scaleY= 1 / obj.scaleX;
+}
+
+updateCircleMeasures = (evt) => {
+    var obj = evt.target;
+    if (obj.type != 'group') {
+        return;
+    }
+    /*var width = obj.getScaledWidth();
+    var height = obj.getScaledHeight();*/
+    var width = obj.getScaledWidth() * 2.54 / 96;
+    // obj._objects[1].text = width.toFixed(2) + 'px';
+    obj._objects[1].text = width.toFixed(2) + 'cm';
+    obj._objects[1].scaleX= 1 / obj.scaleX;
+    obj._objects[1].scaleY= 1 / obj.scaleY;
 }
