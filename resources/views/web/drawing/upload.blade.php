@@ -6,6 +6,9 @@
         }
         #canvas-data-container {
             border: 2px dotted black;
+            /*max-width: 640px;
+            max-height: 480px;
+            overflow: hidden;*/
         }
         .modal-dialog{
             top: 100px;
@@ -64,18 +67,13 @@
                                     <div class="flex">
                                         {{--                                        <h2 style="text-align: center;">Toolbox</h2>--}}
                                         <div>
-                                            <button type="button" class="btn btn-outline-dark" onclick="addText()">Add Text
-                                            </button>
-                                            <button type="button" class="btn btn-outline-dark" onclick="addRect()">Add Rectangle
-                                            </button>
-                                            <button type="button" class="btn btn-outline-dark" onclick="addCircle()">Add Circle
-                                            </button>
+{{--                                            <button type="button" class="btn btn-outline-dark" onclick="addText()">Add Text</button>--}}
+                                            <button type="button" class="btn btn-outline-dark" onclick="addRect()">Add Rectangle</button>
+                                            <button type="button" class="btn btn-outline-dark" onclick="addCircle()">Add Circle</button>
                                             <button type="button" class="btn btn-outline-dark" onclick="addTriangle()">Add Triangle</button>
                                             <button type="button" class="btn btn-outline-dark" onclick="addLine()">Add Line</button>
-                                            <button type="button" class="btn btn-outline-dark" onclick="addImage(this)">Add Image
-                                            </button>
-                                            <button type="button" class="btn btn-danger" onclick="remove()">Remove
-                                            </button>
+                                            <button type="button" class="btn btn-outline-dark" onclick="addImage(this)">Add Image</button>
+{{--                                            <button type="button" class="btn btn-danger" onclick="remove()">Remove</button>--}}
                                         </div>
                                         <div style="display: none;" class="property-box">
                                             <div class="colorbox-container" >
@@ -86,7 +84,7 @@
                                                 {{--                                                <input type="text" id="colorpicker" name="color" class="picker" onblur="getStyle()" value="#e0e0e0"/>--}}
                                                 <div class="form-group">
                                                     <br/>
-                                                    <input type="text" style="width: 200px;" class="form-control" id="colorpicker-input" name="color" class="picker" value="rgb(255, 128, 0)"/>
+{{--                                                    <input type="text" style="width: 200px;" class="form-control" id="colorpicker-input" name="color" class="picker" value="rgb(255, 128, 0)"/>--}}
                                                 </div>
                                                 {{--                                                <span>Fill: {{main.activeObject.fill}}</span>--}}
                                             </div>
@@ -166,6 +164,9 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="main-card mb-3 card">
+                        <a href="#" class="btn btn-outline-success" id="btnSaveCanvasImage">Save</a>
                     </div>
                 </div>
             </div>

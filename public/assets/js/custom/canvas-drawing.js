@@ -1,30 +1,36 @@
 var canvas = fabric.Canvas;
+// var canvas = this.__canvas = fabric.Canvas;
 var activeObject = fabric.Object;
 var color = '';
 var opacity = Number;
+const canvasContainerWidth = 640;
+const canvasContainerHeight = 480;
+
+fabric.Image.prototype._render = function(ctx) {
+    var fwidth = this._element.width / (this.zoomLevel + 1);
+    var fheight = this._element.height / (this.zoomLevel + 1);
+    var wdiff = (fwidth - this._element.width) / 2;
+    var hdiff = (fheight - this._element.height) / 2;
+    ctx.drawImage(this._element, -wdiff, -hdiff, fwidth, fheight, -this.width/2, - this.height/2, this.width, this.height);
+};
 
 $(function () {
     initCanvas();
     // addText();
+    // addRect();
     canvas.setActiveObject(canvas.item(0));
     window.addEventListener('resize', onWindowResize);
 });
 
 initCanvas = () => {
     canvas = new fabric.Canvas("canvas-data-container", {
-        width: 823,
-        height: 400,
+        width: canvasContainerWidth,
+        height: canvasContainerHeight,
         hoverCursor: 'pointer',
         selection: true,
         selectionBorderColor: 'green',
-        backgroundColor: '#b9c5c4'
+        backgroundColor: 'rgba(200,200,200,1)'
     });
-    /*canvas = new fabric.Canvas('canvas-data-container');
-    canvas.setDimensions({
-        width: window.innerWidth * 0.7,
-        height: window.innerHeight
-    });
-    canvas.setBackgroundColor('#565656', canvas.renderAll.bind(canvas));*/
 
     // extra canvas settings
     canvas.preserveObjectStacking = true;
@@ -57,6 +63,46 @@ initCanvas = () => {
             opacity = +(activeObject.get('opacity') * 100).toFixed();
         });
     });
+
+    canvas.on('mouse:wheel', function(option) {
+        var imgObj = canvas.getActiveObject();
+        if (!imgObj) return;
+        option.e.preventDefault();
+        if (option.e.deltaY > 0) {
+            zoomOut();
+        } else {
+            zoomIn();
+        }
+        canvas.renderAll();
+    });
+
+}
+var SCALE_FACTOR = 1.1; //on clicking zoom, enlarge canvas in 30%. TBD
+var zoomMax = 5;   //TBD
+
+// Zoom In
+function zoomIn() {
+    if(canvas.getZoom().toFixed(5) > zoomMax){
+        console.log("zoomIn: Error: cannot zoom-in anymore");
+        return;
+    }
+    canvas.setZoom(canvas.getZoom() * 1.1 );
+    /*canvas.setZoom(canvas.getZoom()*SCALE_FACTOR);
+    canvas.setHeight(canvas.getHeight() * SCALE_FACTOR);
+    canvas.setWidth(canvas.getWidth() * SCALE_FACTOR);
+    canvas.renderAll();*/
+}
+// Zoom Out
+function zoomOut() {
+    if( canvas.getZoom().toFixed(5) <=1 ){
+        console.log("zoomOut: Error: cannot zoom-out anymore");
+        return;
+    }
+    canvas.setZoom(canvas.getZoom() / 1.1 );
+    /*canvas.setZoom(canvas.getZoom()/SCALE_FACTOR);
+    canvas.setHeight(canvas.getHeight() / SCALE_FACTOR);
+    canvas.setWidth(canvas.getWidth() / SCALE_FACTOR);
+    canvas.renderAll();*/
 }
 
 onWindowResize = () => {
@@ -88,33 +134,80 @@ addText = () => {
 addRect = () => {
     let width = 120;
     let height = 80;
-    var rect = new fabric.Rect({
-        left: canvas.width / 2,
-        top: canvas.height / 2,
+    /*var rect = new fabric.Rect({
         // fill: '#ffa726',
         fill: 'rgba(0,0,0,0)',
-        /*width: 120,
-        height: 80,*/
+        /!*width: 120,
+        height: 80,*!/
         width: width,
         height: height,
-        originX: 'center',
-        originY: 'center',
-        stroke: 'black',
-        strokeWidth: 1,
-    });
+        stroke: 'tomato',
+        strokeWidth: 2,
+    });*/
     // canvas.add(rect);
     /*var text = new fabric.Text('W',{top: canvas.height / 2, left: canvas.width / 2.17, fontSize: 16, originX: 'right'});
     var text2 = new fabric.Text('H',{top: canvas.height / 2.4, left: canvas.width / 1.85, fontSize: 16, originX: 'left', angle: -90});*/
-    var text = new fabric.Text('W', {top: canvas.height / 2, left: canvas.width / 2.17, fontSize: 16, originX: 'right'});
-    var text2 = new fabric.Text('H', {top: canvas.height / 2.2, left: canvas.width / 1.85, fontSize: 16, originX: 'left', angle: -90});
-    var group = new fabric.Group([rect, text, text2], {
-        width: width,
-        height: height,
-        /*left: 5,
-        top: 5,*/
-        strokeWidth:0
+    /*var text = new fabric.Text('W', {
+        top: canvas.height / 2,
+        left: canvas.width / 2.17,
+        fill: '#ffffff',
+        fontSize: 16,
+        originX: 'right'
+    });*/
+    var rect = new fabric.Rect({
+        width: 200,
+        height: 100,
+        top: canvas.height / 2,
+        left: canvas.width / 2,
+        fill: 'rgba(0,0,0,0)',
+        stroke: 'tomato',
+        strokeWidth: 2,
     });
+
+    // create a rectangle object
+    var textWidth = new fabric.IText("W", {
+        backgroundColor: '#FFFFFF',
+        fill: '#000000',
+        fontSize: 10,
+        left: rect.left + 60,
+        top: rect.top + rect.height - 40,
+        /*top: 85,
+        left: 60,*/
+        originX: 'right'
+    });
+    // textWidth.scaleToWidth(rect.width);
+    // canvas.add(textWidth);
+
+    var textHeight = new fabric.IText("H", {
+        backgroundColor: '#FFFFFF',
+        fill: '#000000',
+        fontSize: 10,
+        left: rect.left + rect.width - 40,
+        top: rect.top + 60,
+        /*top: 40,
+        left: 170,*/
+        originX: 'left',
+        angle: -90
+    });
+    // textHeight.scaleToWidth(rect.height);
+    // canvas.add(textHeight);
+
+    var group = new fabric.Group([ rect, textWidth, textHeight ], {
+        /*left: 100,
+        top: 100,*/
+        originX: 'center',
+        originY: 'center',
+        lockScalingX: false,
+        lockScalingY: false,
+        hasRotatingPoint: false,
+        transparentCorners: false,
+        cornerSize: 7
+
+
+    });
+
     canvas.add(group);
+    canvas.renderAll();
     canvas.on("object:scaling", updateMeasures);
     $('.colorbox-container').css('display', 'block');
 };
@@ -128,11 +221,22 @@ addCircle = () => {
         radius: 50,
         originX: 'center',
         originY: 'center',
-        stroke: 'black',
-        strokeWidth: 1,
+        stroke: 'tomato',
+        strokeWidth: 2,
     });
     // canvas.add(circle);
-    var text = new fabric.Text('W', {top: canvas.height / 2.1, left: canvas.width / 2, fontSize: 16, originX: 'right'});
+    var text = new fabric.Text('W', {
+        /*top: circle.top - 20,
+        left: circle.left - 20,*/
+        left: canvas.width / 2,
+        top: canvas.height / 2,
+        originX: 'center',
+        originY: 'center',
+        backgroundColor: '#FFFFFF',
+        fill: '#000000',
+        // fill: '#ffffff',
+        fontSize: 12,
+    });
 
     var group = new fabric.Group([ circle, text ], {
         /*left: canvas.width / 2,
@@ -150,7 +254,7 @@ addCircle = () => {
 };
 
 addTriangle = () => {
-    canvas.add(new fabric.Triangle({
+    /*canvas.add(new fabric.Triangle({
         left: canvas.width / 2,
         top: canvas.height / 2,
         // fill: '#78909c',
@@ -159,9 +263,72 @@ addTriangle = () => {
         height: 100,
         originX: 'center',
         originY: 'center',
-        stroke: 'black',
-        strokeWidth: 1,
-    }));
+        stroke: 'tomato',
+        strokeWidth: 2,
+    }));*/
+    var triangle = new fabric.Triangle({
+        left: canvas.width / 2,
+        top: canvas.height / 2,
+        // fill: '#78909c',
+        fill: 'rgba(0,0,0,0)',
+        width: 100,
+        height: 100,
+        originX: 'center',
+        originY: 'center',
+        stroke: 'tomato',
+        strokeWidth: 2,
+    });
+
+    // create a triangle object
+    var textWidth = new fabric.IText("W", {
+        backgroundColor: '#FFFFFF',
+        fill: '#000000',
+        fontSize: 10,
+        left: triangle.left + 60,
+        top: triangle.top + triangle.height - 40,
+        originX: 'center',
+        originY: 'center',
+        /*top: 85,
+        left: 60,*/
+        originX: 'right'
+    });
+    // textWidth.scaleToWidth(rect.width);
+    // canvas.add(textWidth);
+
+    var textHeight = new fabric.IText("H", {
+        backgroundColor: '#FFFFFF',
+        fill: '#000000',
+        fontSize: 10,
+        left: triangle.left + triangle.width - 40,
+        top: triangle.top + 60,
+        originX: 'center',
+        originY: 'center',
+        /*top: 40,
+        left: 170,*/
+        originX: 'left',
+        angle: -90
+    });
+    // textHeight.scaleToWidth(rect.height);
+    // canvas.add(textHeight);
+
+    var group = new fabric.Group([ triangle, textWidth, textHeight ], {
+        /*left: 100,
+        top: 100,*/
+        originX: 'center',
+        originY: 'center',
+        lockScalingX: false,
+        lockScalingY: false,
+        hasRotatingPoint: false,
+        transparentCorners: false,
+        cornerSize: 7
+
+
+    });
+
+    canvas.add(group);
+    canvas.renderAll();
+    canvas.on("object:scaling", updateMeasures);
+
     $('.colorbox-container').css('display', 'block');
 };
 
@@ -211,14 +378,57 @@ addImage = (ev) => {
 initCanvasOnUpload = (imagePath) => {
     fabric.Image.fromURL(imagePath, (img) => {
         img.set({
-            left: 50,
-            top: 5
+            /*left: 50,
+            top: 5,*/
+            angle: 0,
+            width: canvas.width * 10,
+            height: canvas.height * 10,
+            hasControls: false,
+            // selection: false,
+            selection: true,
+            lockRotation:false,
+            hasRotatingPoint: false,
+            isDrawingMode: false,
+            lockMovementX: true,
+            lockMovementY: true,
         });
-        img.scaleToHeight(250);
-        img.scaleToWidth(250);
+
+        var zoomLevel = 0;
+        var zoomLevelMin = 0;
+        var zoomLevelMax = 3;
+        img.zoomLevel = 0
+        img.scale(0.1);
         canvas.add(img);
+
+        /*canvas.setBackgroundImage(img);
+        canvas.renderAll();
+        img.zoomIn = function() {
+            if (zoomLevel < zoomLevelMax) {
+                zoomLevel += 0.1;
+                img.zoomLevel = zoomLevel;
+            }
+        };
+        img.zoomOut = function() {
+            zoomLevel -= 0.1;
+            if (zoomLevel < 0) zoomLevel = 0;
+            if (zoomLevel >= zoomLevelMin) {
+                img.zoomLevel = zoomLevel;
+            }
+        };*/
         $('.colorbox-container').css('display', 'none');
     });
+
+    /*canvas.on('mouse:wheel', function(option) {
+        var imgObj = canvas.getActiveObject();
+        if (!imgObj) return;
+        option.e.preventDefault();
+        if (option.e.deltaY > 0) {
+            imgObj.zoomOut();
+        } else {
+            imgObj.zoomIn();
+        }
+        canvas.renderAll();
+    });*/
 };
 
 function readImageURL() {
@@ -349,11 +559,11 @@ function updateMeasures(evt) {
     var width = obj.getScaledWidth() * 2.54 / 96;
     var height = obj.getScaledHeight() * 2.54 / 96;
     // obj._objects[1].text = width.toFixed(2) + 'px';
-    obj._objects[1].text = width.toFixed(2) + 'cm';
+    obj._objects[1].text = width.toFixed(2);
     obj._objects[1].scaleX= 1 / obj.scaleX;
     obj._objects[1].scaleY= 1 / obj.scaleY;
     // obj._objects[2].text = height.toFixed(2) + 'px';
-    obj._objects[2].text = height.toFixed(2) + 'cm';
+    obj._objects[2].text = height.toFixed(2);
     obj._objects[2].scaleX= 1 / obj.scaleY;
     obj._objects[2].scaleY= 1 / obj.scaleX;
 }
@@ -367,7 +577,17 @@ updateCircleMeasures = (evt) => {
     var height = obj.getScaledHeight();*/
     var width = obj.getScaledWidth() * 2.54 / 96;
     // obj._objects[1].text = width.toFixed(2) + 'px';
-    obj._objects[1].text = width.toFixed(2) + 'cm';
+    obj._objects[1].text = width.toFixed(2);
     obj._objects[1].scaleX= 1 / obj.scaleX;
     obj._objects[1].scaleY= 1 / obj.scaleY;
+}
+
+var imageSaver = document.getElementById('btnSaveCanvasImage');
+imageSaver.addEventListener('click', saveCanvasImage, false);
+function saveCanvasImage(e) {
+    this.href = canvas.toDataURL({
+        format: 'png',
+        quality: 0.8
+    });
+    this.download = 'canvas.png'
 }

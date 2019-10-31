@@ -20,7 +20,7 @@ class DrawingController extends Controller
         ]);
         if (request()->hasFile('mc_type'))
         {
-            $allowedfileExtension = ['pdf','jpg','png','tiff'];
+            $allowedfileExtension = ['pdf','jpg','jpeg','png','tiff'];
             $extension = $request->mc_type->getClientOriginalExtension();
             $check = in_array($extension, $allowedfileExtension);
             if ($check) {
