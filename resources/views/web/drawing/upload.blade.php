@@ -72,7 +72,7 @@
                                             <button type="button" class="btn btn-outline-dark" onclick="addCircle()">Add Circle</button>
                                             <button type="button" class="btn btn-outline-dark" onclick="addTriangle()">Add Triangle</button>
                                             <button type="button" class="btn btn-outline-dark" onclick="addLine()">Add Line</button>
-                                            <button type="button" class="btn btn-outline-dark" onclick="addImage(this)">Add Image</button>
+{{--                                            <button type="button" class="btn btn-outline-dark" onclick="addImage(this)">Add Image</button>--}}
 {{--                                            <button type="button" class="btn btn-danger" onclick="remove()">Remove</button>--}}
                                         </div>
                                         <div style="display: none;" class="property-box">

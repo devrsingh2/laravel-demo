@@ -3,8 +3,8 @@ var canvas = fabric.Canvas;
 var activeObject = fabric.Object;
 var color = '';
 var opacity = Number;
-const canvasContainerWidth = 640;
-const canvasContainerHeight = 480;
+const canvasContainerWidth = 920;
+const canvasContainerHeight = 600;
 
 fabric.Image.prototype._render = function(ctx) {
     var fwidth = this._element.width / (this.zoomLevel + 1);
@@ -141,7 +141,7 @@ addRect = () => {
         height: 80,*!/
         width: width,
         height: height,
-        stroke: 'tomato',
+        stroke: 'red',
         strokeWidth: 2,
     });*/
     // canvas.add(rect);
@@ -160,7 +160,7 @@ addRect = () => {
         top: canvas.height / 2,
         left: canvas.width / 2,
         fill: 'rgba(0,0,0,0)',
-        stroke: 'tomato',
+        stroke: 'red',
         strokeWidth: 2,
     });
 
@@ -221,7 +221,7 @@ addCircle = () => {
         radius: 50,
         originX: 'center',
         originY: 'center',
-        stroke: 'tomato',
+        stroke: 'red',
         strokeWidth: 2,
     });
     // canvas.add(circle);
@@ -263,7 +263,7 @@ addTriangle = () => {
         height: 100,
         originX: 'center',
         originY: 'center',
-        stroke: 'tomato',
+        stroke: 'red',
         strokeWidth: 2,
     }));*/
     var triangle = new fabric.Triangle({
@@ -275,7 +275,7 @@ addTriangle = () => {
         height: 100,
         originX: 'center',
         originY: 'center',
-        stroke: 'tomato',
+        stroke: 'red',
         strokeWidth: 2,
     });
 
@@ -336,8 +336,8 @@ addLine = () => {
     canvas.add(new fabric.Line([0, 0, 100, 100], {
         left: canvas.width / 2,
         top: canvas.height / 2,
-        fill: 'tomato',
-        stroke: 'tomato',
+        fill: 'red',
+        stroke: 'red',
         selectable: true,
         originX: 'center',
         originY: 'center',
